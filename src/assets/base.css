@@ -1,0 +1,29 @@
+* {
+  padding: 0;
+  margin: 0;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  background-color: #041e39;
+  color: white;
+  font-family: 'Oswald', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+@font-face {
+  font-family: 'Oswald';
+  src: url(Oswald-VariableFont_wght.ttf) format('truetype');
+}
+
+#app {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
