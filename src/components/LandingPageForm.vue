@@ -9,7 +9,7 @@ function submitForm() {
   emit(
     'qna-received',
     fetch(
-      `https://9884-49-248-175-215.ngrok-free.app/generate-video?url=${encodeURIComponent(url.value)}`,
+      `https://lacewing-relevant-mosquito.ngrok-free.app/generate-video?url=${encodeURIComponent(url.value)}`,
       {
         headers: {
           'ngrok-skip-browser-warning': 1

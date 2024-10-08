@@ -21,7 +21,7 @@ watch(
 )
 
 function submitAnswer() {
-  fetch(`https://9884-49-248-175-215.ngrok-free.app/evaluate-answer`, {
+  fetch(`https://lacewing-relevant-mosquito.ngrok-free.app/evaluate-answer`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json' // Set the Content-Type header
