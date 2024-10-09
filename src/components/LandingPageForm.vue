@@ -8,14 +8,16 @@ const emit = defineEmits('qna-received', 'set-url')
 function submitForm() {
   emit(
     'qna-received',
-    fetch(
-      `https://lacewing-relevant-mosquito.ngrok-free.app/generate-video?url=${encodeURIComponent(url.value)}`,
-      {
-        headers: {
-          'ngrok-skip-browser-warning': 1
-        }
-      }
-    )
+    fetch(`${import.meta.env.VITE_BACKEND_URL}/generate-video`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'ngrok-skip-browser-warning': 1
+      },
+      body: JSON.stringify({
+        url: url.value
+      })
+    })
   )
   emit('set-url', url.value)
 }

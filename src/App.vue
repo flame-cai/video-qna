@@ -32,8 +32,18 @@ function setUrl(url_string) {
   <header>
     <h1>Video Q&A Generator</h1>
   </header>
-  <LandingPageForm v-if="progress === 0" @qna-received="qnaReceived" @set-url="setUrl" />
-  <Player v-else-if="progress === 1" :qna_promise="qna_promise" :url="url" />
+  <LandingPageForm
+    v-if="progress === 0"
+    @qna-received="qnaReceived"
+    @set-url="setUrl"
+    :backend_url="backend_url"
+  />
+  <Player
+    v-else-if="progress === 1"
+    :qna_promise="qna_promise"
+    :url="url"
+    :backend_url="backend_url"
+  />
 </template>
 
 <style scoped></style>

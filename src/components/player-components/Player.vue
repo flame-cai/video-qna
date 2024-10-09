@@ -23,12 +23,40 @@ const currentChapterNumber = ref(0)
 let currentChapterStartingTimestamp = 0
 let currentChapterEndingTimestamp = 0
 
+async function checkTaskStatus(taskId) {
+  let response
+  let result
+  do {
+    response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/generate-video/${taskId}`)
+    result = await response.json()
+    console.log(result.status)
+
+    if (result.status === 'completed') {
+      console.log('Task Result:', result.result) // Handle the result here
+      return result
+    }
+
+    // Wait 2 seconds before checking again
+    await new Promise((resolve) => setTimeout(resolve, 2000))
+  } while (result.status !== 'completed')
+}
+
 props.qna_promise
   .then((response) => response.json())
-  .then((object) => {
-    qna.value = object.data
+  .then(async (object) => {
+    const taskId = object.taskId
+    return checkTaskStatus(taskId)
+  })
+  .then((result) => {
+    console.log(result)
+    qna.value = result.data
     currentChapterEndingTimestamp = convertToSeconds(qna.value[0][3])
     isDataLoaded.value = true
+  })
+  .catch((e) => {
+    console.error(e)
+    alert('Something went wrong...')
+    window.location.reload()
   })
 
 function convertToSeconds(timeStr) {
@@ -38,6 +66,11 @@ function convertToSeconds(timeStr) {
 
 watch(isDataLoaded, () => {
   playerRef.value.subscribe(({ currentTime }) => {
+    if (document.querySelector('div.ad-showing')) {
+      //Ad is active as a video
+      console.log('this is an ad')
+      return
+    }
     if (
       !(
         currentTime >= currentChapterStartingTimestamp &&
