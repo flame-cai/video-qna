@@ -21,7 +21,7 @@ watch(
 )
 
 function submitAnswer() {
-  fetch(`${import.meta.env.VITE_BACKEND}/evaluate-answer`, {
+  fetch(`${import.meta.env.VITE_BACKEND_URLK}/evaluate-answer`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json' // Set the Content-Type header
