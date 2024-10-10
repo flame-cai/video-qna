@@ -13,6 +13,7 @@ const playerRef = useTemplateRef('player')
 const qna = ref()
 const isDataLoaded = ref(false)
 const isVideoPlaying = ref(false)
+let isAd = ref(false)
 
 // const score = ref(0)
 // const answerIsCorrect = ref(false)
@@ -27,21 +28,33 @@ async function checkTaskStatus(taskId) {
   let response
   let result
   do {
-    response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/generate-video/${taskId}`, {
-      headers: {
-        'ngrok-skip-browser-warning': 1
+    try {
+      response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/generate-video/${taskId}`, {
+        headers: {
+          'ngrok-skip-browser-warning': 1
+        }
+      })
+
+      if (!response.ok) {
+        throw new Error(`Error: ${response.status}`) // Trigger error handling
       }
-    })
-    result = await response.json()
-    console.log(result.status)
 
-    if (result.status === 'completed') {
-      console.log('Task Result:', result.data) // Handle the result here
-      return result
+      result = await response.json()
+      console.log(result.status)
+
+      if (result.status === 'completed') {
+        console.log('Task Result:', result.data) // Handle the result here
+        return result
+      }
+
+      // Wait 2 seconds before checking again
+      await new Promise((resolve) => setTimeout(resolve, 2000))
+    } catch (e) {
+      console.error(e)
+      alert('Something went wrong...')
+      window.location.reload() // Reload the page on error
+      break
     }
-
-    // Wait 2 seconds before checking again
-    await new Promise((resolve) => setTimeout(resolve, 2000))
   } while (result.status !== 'completed')
 }
 
@@ -73,8 +86,17 @@ function convertToSeconds(timeStr) {
 }
 
 watch(isDataLoaded, () => {
+  playerRef.value.subscribe(({ duration }) => {
+    if (Math.abs(duration - convertToSeconds(qna.value[qna.value.length - 1][3])) > 10) {
+      isAd.value = true
+      console.log('duration', duration)
+      console.log('last chapter ending')
+    } else {
+      isAd.value = false
+    }
+  })
   playerRef.value.subscribe(({ currentTime }) => {
-    if (document.querySelector('div.ad-showing')) {
+    if (isAd.value) {
       //Ad is active as a video
       console.log('this is an ad')
       return
