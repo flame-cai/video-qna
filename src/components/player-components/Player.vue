@@ -32,7 +32,7 @@ async function checkTaskStatus(taskId) {
     console.log(result.status)
 
     if (result.status === 'completed') {
-      console.log('Task Result:', result.result) // Handle the result here
+      console.log('Task Result:', result.data) // Handle the result here
       return result
     }
 
@@ -42,13 +42,17 @@ async function checkTaskStatus(taskId) {
 }
 
 props.qna_promise
-  .then((response) => response.json())
-  .then(async (object) => {
+  .then((response) => {
+    console.log('response:', response)
+    return response.json()
+  })
+  .then((object) => {
+    console.log('object:', object)
     const taskId = object.taskId
     return checkTaskStatus(taskId)
   })
   .then((result) => {
-    console.log(result)
+    console.log('result:', result)
     qna.value = result.data
     currentChapterEndingTimestamp = convertToSeconds(qna.value[0][3])
     isDataLoaded.value = true
