@@ -27,7 +27,11 @@ async function checkTaskStatus(taskId) {
   let response
   let result
   do {
-    response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/generate-video/${taskId}`)
+    response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/generate-video/${taskId}`, {
+      headers: {
+        'ngrok-skip-browser-warning': 1
+      }
+    })
     result = await response.json()
     console.log(result.status)
 
