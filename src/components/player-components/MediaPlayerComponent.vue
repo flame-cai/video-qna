@@ -22,6 +22,7 @@ onMounted(() => {
     if (Math.abs(duration - convertToSeconds(props.qna[props.qna.length - 1][3])) > 10) {
       isAd.value = true
       console.log('duration', duration)
+      console.log('reload key:', props.reload_key)
       emit('reload')
     } else {
       isAd.value = false
@@ -30,6 +31,7 @@ onMounted(() => {
 
   playerRef.value.subscribe(({ currentTime }) => {
     if (isAd.value) {
+      console.log('reload key:', props.reload_key)
       emit('reload')
     }
 
