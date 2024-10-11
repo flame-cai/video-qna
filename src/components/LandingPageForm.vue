@@ -3,7 +3,7 @@ import { ref } from 'vue'
 
 const url = ref('')
 
-const emit = defineEmits('qna-received', 'set-url')
+const emit = defineEmits(['qna-received', 'set-url'])
 
 function submitForm() {
   emit(
