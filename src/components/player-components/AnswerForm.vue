@@ -64,3 +64,50 @@ function submitAnswer() {
     </div>
   </div>
 </template>
+
+<style>
+#answerForm {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+#answerForm * {
+  margin-bottom: 0.5em;
+}
+
+#answerForm textarea {
+  border: 2.1px solid white;
+  padding: 0.5em;
+  background-color: transparent;
+  color: white;
+  border-radius: 10px;
+}
+
+#answerForm textarea.correct {
+  border: 2.1px solid green;
+}
+
+#answerForm textarea.wrong {
+  border: 2.1px solid red;
+}
+
+#answerForm textarea:focus {
+  outline: orange solid;
+  border-color: transparent;
+}
+
+button {
+  border: 1px;
+  border: 2.1px solid white;
+  border-radius: 10px;
+  padding: 0.5em;
+  margin: auto;
+}
+
+button:hover {
+  background-color: orange;
+  border-color: orange;
+  color: white;
+}
+</style>
