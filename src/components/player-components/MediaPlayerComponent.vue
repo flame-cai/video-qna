@@ -29,6 +29,10 @@ onMounted(() => {
   })
 
   playerRef.value.subscribe(({ currentTime }) => {
+    if (isAd.value) {
+      emit('reload')
+    }
+
     if (
       !(
         currentTime >= currentChapterStartingTimestamp &&
