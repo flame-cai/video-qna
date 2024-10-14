@@ -80,6 +80,11 @@ watch(reload_key, () => {
     window.location.reload()
   }
 })
+
+function resetQuiz() {
+  localStorage.clear()
+  window.location.reload()
+}
 </script>
 
 <template>
@@ -98,6 +103,7 @@ watch(reload_key, () => {
       :currentChapterNumber="currentChapterNumber"
       :isVideoPlaying="isVideoPlaying"
     />
+    <button @click="resetQuiz">New Quiz</button>
   </div>
   <PlayerComponentLoader v-else />
 </template>
