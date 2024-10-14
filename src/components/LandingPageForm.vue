@@ -6,6 +6,7 @@ const url = ref('')
 const emit = defineEmits(['qna-received', 'set-url'])
 
 function submitForm() {
+  
   emit(
     'qna-received',
     fetch(`${import.meta.env.VITE_BACKEND_URL}/generate-video`, {
