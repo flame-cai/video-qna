@@ -61,7 +61,7 @@ if (props.qna_promise) {
     .then((result) => {
       console.log('result:', result)
       qna.value = result.data
-      localStorage.setItem('qna', result.data)
+      localStorage.setItem('qna', JSON.stringify(result.data))
       isDataLoaded.value = true
     })
     .catch((e) => {
@@ -71,7 +71,7 @@ if (props.qna_promise) {
     })
 } else {
   url.value = localStorage.getItem('url')
-  qna.value = localStorage.getItem('qna')
+  qna.value = JSON.parse(localStorage.getItem('qna'))
   isDataLoaded.value = true
 }
 
