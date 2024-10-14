@@ -72,6 +72,7 @@ if (props.qna_promise) {
 } else {
   url.value = localStorage.getItem('url')
   qna.value = localStorage.getItem('qna')
+  isDataLoaded.value = true
 }
 
 watch(reload_key, () => {
