@@ -2,6 +2,7 @@
 import { ref } from 'vue'
 
 const url = ref('')
+const question_format = ref()
 
 const emit = defineEmits(['qna-received', 'set-url'])
 
@@ -16,7 +17,8 @@ function submitForm() {
         'ngrok-skip-browser-warning': 1
       },
       body: JSON.stringify({
-        url: url.value
+        url: url.value,
+        question_format: question_format.value
       })
     })
   )
@@ -27,7 +29,12 @@ function submitForm() {
 <template>
   <div class="landing-page-component">
     <form @submit.prevent="submitForm" id="videoForm">
-      <input v-model="url" type="url" placeholder="Enter the url of the video" />
+      <input v-model="url" type="url" placeholder="Enter the url of the video" required/>
+      Question Format:
+      <div>
+        <label>MCQ</label><input type="radio" name="question_format" v-model="question_format" id="question_format_mcq" value="mcq" required>
+        <label>Subjective</label><input type="radio" name="question_format" v-model="question_format" id="question_format_subjective" value="subjective" required>
+      </div>
       <button type="submit">Get Questions</button>
     </form>
   </div>
@@ -50,7 +57,7 @@ form {
   max-width: 540px;
 }
 
-input {
+input[type="url"] {
   width: 100%;
   border: 2.1px solid white;
   border-radius: 10px;
@@ -60,7 +67,7 @@ input {
   margin-bottom: 1em;
 }
 
-input:focus {
+input[type="url"]:focus {
   border-color: transparent;
   outline: orange solid;
 }
