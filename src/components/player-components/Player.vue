@@ -6,7 +6,7 @@ import MediaPlayerComponent from './MediaPlayerComponent.vue'
 import SubjectiveAnswerForm from './SubjectiveAnswerForm.vue'
 import MCQAnswerForm from './MCQAnswerForm.vue'
 
-const props = defineProps(['qna_promise', 'url'])
+const props = defineProps(['qna_promise', 'url', 'question_format'])
 const qna = ref()
 const url = ref(props.url)
 const question_format = ref(props.question_format)

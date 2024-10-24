@@ -43,6 +43,7 @@ onMounted(() => {
   })
 
   playerRef.value.subscribe(({ currentTime }) => {
+    console.log(currentTime)
     if (isAd.value) {
       console.log('reload key:', props.reload_key)
       emit('reload')
@@ -57,7 +58,10 @@ onMounted(() => {
       for (const chapter in props.qna) {
         const startingTimestamp = convertToSeconds(props.qna[chapter]['chapter_start_timestamp'])
         const endingTimestamp = convertToSeconds(props.qna[chapter]['chapter_end_timestamp'])
+        console.log('starting and ending timestamps', startingTimestamp, endingTimestamp)
+        console.log(currentTime)
         if (currentTime >= startingTimestamp && currentTime < endingTimestamp) {
+          console.log('chapter', chapter)
           currentChapterNumber = chapter
           emit('update-chapter', currentChapterNumber)
           currentChapterStartingTimestamp = startingTimestamp
@@ -92,7 +96,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <media-player ref="player" title="Demo" :src="url" class="video">
+  <media-player ref="player" :src="url" class="video">
     <media-provider></media-provider>
     <media-video-layout></media-video-layout>
   </media-player>
