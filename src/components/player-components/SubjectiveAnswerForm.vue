@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script setup>
 import { ref, watch } from 'vue'
 
 const props = defineProps(['qna', 'currentChapterNumber', 'isVideoPlaying'])
@@ -27,8 +27,8 @@ function submitAnswer() {
       'Content-Type': 'application/json' // Set the Content-Type header
     },
     body: JSON.stringify({
-      question: props.qna[props.currentChapterNumber - 1][4],
-      answer: props.qna[props.currentChapterNumber - 1][5],
+      question: props.qna[props.currentChapterNumber - 1]['chapter_question'],
+      answer: props.qna[props.currentChapterNumber - 1]['chapter_answer'],
       submission: submission.value
     })
   })
@@ -50,7 +50,9 @@ function submitAnswer() {
 <template>
   <div v-if="currentChapterNumber > 0">
     <form @submit.prevent="submitAnswer" id="answerForm">
-      <label for="submission">Q. {{ props.qna[props.currentChapterNumber - 1][4] }}</label>
+      <label for="submission"
+        >Q. {{ props.qna[props.currentChapterNumber - 1]['chapter_question'] }}</label
+      >
       <textarea
         v-model="submission"
         rows="4"

@@ -3,15 +3,18 @@
 import { ref, watch } from 'vue'
 import PlayerComponentLoader from './PlayerComponentLoader.vue'
 import MediaPlayerComponent from './MediaPlayerComponent.vue'
-import AnswerForm from './AnswerForm.vue'
+import SubjectiveAnswerForm from './SubjectiveAnswerForm.vue'
+import MCQAnswerForm from './MCQAnswerForm.vue'
 
 const props = defineProps(['qna_promise', 'url'])
 const qna = ref()
 const url = ref(props.url)
+const question_format = ref(props.question_format)
 const isDataLoaded = ref(false)
 const isVideoPlaying = ref(false)
 const reload_key = ref(0)
 const currentChapterNumber = ref(0)
+const duration = ref(0)
 
 async function checkTaskStatus(taskId) {
   let response
@@ -60,8 +63,11 @@ if (props.qna_promise) {
     })
     .then((result) => {
       console.log('result:', result)
-      qna.value = result.data
-      localStorage.setItem('qna', JSON.stringify(result.data))
+      qna.value = result.data.chapters
+
+      duration.value = result.data.duration
+      localStorage.setItem('qna', JSON.stringify(qna.value))
+      localStorage.setItem('duration', JSON.stringify(result.data.duration))
       isDataLoaded.value = true
     })
     .catch((e) => {
@@ -71,7 +77,9 @@ if (props.qna_promise) {
     })
 } else {
   url.value = localStorage.getItem('url')
+  question_format.value = localStorage.getItem('question_format')
   qna.value = JSON.parse(localStorage.getItem('qna'))
+  duration.value = JSON.parse(localStorage.getItem('duration'))
   isDataLoaded.value = true
 }
 
@@ -93,13 +101,20 @@ function resetQuiz() {
       :qna="qna"
       :reload_key="reload_key"
       :url="url"
+      :duration="duration"
       @update-chapter="(n) => (currentChapterNumber = n)"
       @reload="reload_key++"
       @update-video-playing="(condition) => (isVideoPlaying = condition)"
     />
-    <AnswerForm
-      v-if="currentChapterNumber > 0"
+    <SubjectiveAnswerForm
+      v-if="currentChapterNumber > 0 && question_format === 'subjective'"
       :qna="qna"
+      :currentChapterNumber="currentChapterNumber"
+      :isVideoPlaying="isVideoPlaying"
+    />
+    <MCQAnswerForm
+      v-else-if="currentChapter > 0 && question_format === 'mcq'"
+      :qna="qna.value.mcq_sets"
       :currentChapterNumber="currentChapterNumber"
       :isVideoPlaying="isVideoPlaying"
     />

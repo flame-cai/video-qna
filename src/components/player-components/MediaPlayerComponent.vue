@@ -2,7 +2,7 @@
 import 'vidstack/bundle'
 import { onMounted, ref, useTemplateRef } from 'vue'
 
-const props = defineProps(['qna', 'reload_key', 'url'])
+const props = defineProps(['qna', 'reload_key', 'url', 'duration'])
 const emit = defineEmits(['update-chapter', 'reload', 'update-video-playing'])
 
 const playerRef = useTemplateRef('player')
@@ -13,15 +13,28 @@ let currentChapterStartingTimestamp = 0
 let currentChapterEndingTimestamp = 0
 
 function convertToSeconds(timeStr) {
-  const [hours, minutes, seconds] = timeStr.split(':').map(Number)
-  return hours * 3600 + minutes * 60 + seconds
+  console.log('timeStr:', timeStr)
+  const parts = timeStr.split(':').map(Number)
+
+  if (parts.length === 2) {
+    // If only minutes and seconds are provided (mm:ss)
+    const [minutes, seconds] = parts
+    return minutes * 60 + seconds
+  } else if (parts.length === 3) {
+    // If hours, minutes, and seconds are provided (hh:mm:ss)
+    const [hours, minutes, seconds] = parts
+    return hours * 3600 + minutes * 60 + seconds
+  } else {
+    throw new Error('Invalid time format')
+  }
 }
 
 onMounted(() => {
   playerRef.value.subscribe(({ duration }) => {
-    if (Math.abs(duration - convertToSeconds(props.qna[props.qna.length - 1][3])) > 10) {
+    console.log('duration:', props.duration)
+    if (Math.abs(duration - convertToSeconds(props.duration)) > 1) {
       isAd.value = true
-      console.log('duration', duration)
+      console.log('duration', props.duration, convertToSeconds(props.duration))
       console.log('reload key:', props.reload_key)
       emit('reload')
     } else {
@@ -42,8 +55,8 @@ onMounted(() => {
       )
     ) {
       for (const chapter in props.qna) {
-        const startingTimestamp = convertToSeconds(props.qna[chapter][2])
-        const endingTimestamp = convertToSeconds(props.qna[chapter][3])
+        const startingTimestamp = convertToSeconds(props.qna[chapter]['chapter_start_timestamp'])
+        const endingTimestamp = convertToSeconds(props.qna[chapter]['chapter_end_timestamp'])
         if (currentTime >= startingTimestamp && currentTime < endingTimestamp) {
           currentChapterNumber = chapter
           emit('update-chapter', currentChapterNumber)
@@ -54,7 +67,9 @@ onMounted(() => {
           console.log('currentChapterEndingTimestamp: ', currentChapterEndingTimestamp)
         }
       }
-      if (currentTime >= convertToSeconds(props.qna[props.qna.length - 1][3])) {
+      if (
+        currentTime >= convertToSeconds(props.qna[props.qna.length - 1]['chapter_end_timestamp'])
+      ) {
         currentChapterNumber = props.qna.length
         emit('update-chapter', currentChapterNumber)
       }

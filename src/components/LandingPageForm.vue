@@ -4,10 +4,9 @@ import { ref } from 'vue'
 const url = ref('')
 const question_format = ref()
 
-const emit = defineEmits(['qna-received', 'set-url'])
+const emit = defineEmits(['qna-received', 'set-url', 'set-qf'])
 
 function submitForm() {
-  
   emit(
     'qna-received',
     fetch(`${import.meta.env.VITE_BACKEND_URL}/generate-video`, {
@@ -23,17 +22,34 @@ function submitForm() {
     })
   )
   emit('set-url', url.value)
+  emit('set-qf', question_format.value)
 }
 </script>
 
 <template>
   <div class="landing-page-component">
     <form @submit.prevent="submitForm" id="videoForm">
-      <input v-model="url" type="url" placeholder="Enter the url of the video" required/>
+      <input v-model="url" type="url" placeholder="Enter the url of the video" required />
       Question Format:
       <div>
-        <label>MCQ</label><input type="radio" name="question_format" v-model="question_format" id="question_format_mcq" value="mcq" required>
-        <label>Subjective</label><input type="radio" name="question_format" v-model="question_format" id="question_format_subjective" value="subjective" required>
+        <label>MCQ</label
+        ><input
+          type="radio"
+          name="question_format"
+          v-model="question_format"
+          id="question_format_mcq"
+          value="mcq"
+          required
+        />
+        <label>Subjective</label
+        ><input
+          type="radio"
+          name="question_format"
+          v-model="question_format"
+          id="question_format_subjective"
+          value="subjective"
+          required
+        />
       </div>
       <button type="submit">Get Questions</button>
     </form>
@@ -57,7 +73,7 @@ form {
   max-width: 540px;
 }
 
-input[type="url"] {
+input[type='url'] {
   width: 100%;
   border: 2.1px solid white;
   border-radius: 10px;
@@ -67,7 +83,7 @@ input[type="url"] {
   margin-bottom: 1em;
 }
 
-input[type="url"]:focus {
+input[type='url']:focus {
   border-color: transparent;
   outline: orange solid;
 }
