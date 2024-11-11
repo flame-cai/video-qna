@@ -78,7 +78,10 @@ onMounted(() => {
         emit('update-chapter', currentChapterNumber)
       }
       playerRef.value.pause()
-      document.exitFullscreen()
+      if (document.fullscreenElement) {
+        document.exitFullscreen()
+      }
+
     }
   })
 
