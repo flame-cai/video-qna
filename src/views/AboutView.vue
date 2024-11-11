@@ -1,5 +1,5 @@
 <script setup>
-import Player from '@/components/player-components/Player.vue'
+import Player from '@/components/player-components/QNAComponent.vue'
 </script>
 
 <template>

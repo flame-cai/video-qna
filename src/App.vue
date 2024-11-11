@@ -1,7 +1,7 @@
 <script setup>
 import { ref } from 'vue'
 import LandingPageForm from './components/LandingPageForm.vue'
-import Player from './components/player-components/Player.vue'
+import QNAComponent from './components/qna-app-components/QNAComponent.vue'
 
 let progress = ref(0)
 const url = ref()
@@ -43,7 +43,7 @@ function setQuestionFormat(qf) {
     @set-url="setUrl"
     @set-qf="setQuestionFormat"
   />
-  <Player
+  <QNAComponent
     v-else-if="progress === 1"
     :qna_promise="qna_promise"
     :url="url"

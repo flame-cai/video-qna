@@ -113,8 +113,8 @@ function resetQuiz() {
       :isVideoPlaying="isVideoPlaying"
     />
     <MCQAnswerForm
-      v-else-if="currentChapter > 0 && question_format === 'mcq'"
-      :qna="qna.value.mcq_sets"
+      v-else-if="currentChapterNumber > 0 && question_format === 'mcq'"
+      :qna="qna"
       :currentChapterNumber="currentChapterNumber"
       :isVideoPlaying="isVideoPlaying"
     />
