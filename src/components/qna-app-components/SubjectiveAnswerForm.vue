@@ -1,5 +1,8 @@
 <script setup>
-import { ref, watch } from 'vue'
+import { useSpeechSynthesis } from '@vueuse/core';
+import { ref, watch, onMounted } from 'vue'
+
+import VolumeIcon from './VolumeIcon.vue';
 
 const props = defineProps(['qna', 'currentChapterNumber', 'isVideoPlaying'])
 
@@ -18,6 +21,11 @@ watch(
       answerIsWrong.value = false
     }
   }
+)
+
+const speech = useSpeechSynthesis(props.qna[props.currentChapterNumber - 1]['chapter_question'], {
+  rate: 0.75,
+}
 )
 
 function submitAnswer() {
@@ -45,19 +53,36 @@ function submitAnswer() {
       }
     })
 }
+
+let synth
+
+onMounted(() => {
+  if (speech.isSupported.value) {
+    setTimeout(() => {
+      synth = window.speechSynthesis;
+    })
+  }
+})
+
+function play() {
+  if (speech.status.value === 'pause') {
+    window.speechSynthesis.resume();
+  } else {
+    speech.stop();
+    speech.speak();
+  }
+}
+
 </script>
 
 <template>
   <div v-if="currentChapterNumber > 0">
     <form @submit.prevent="submitAnswer" id="answerForm">
-      <label for="submission"
-        >Q. {{ props.qna[props.currentChapterNumber - 1]['chapter_question'] }}</label
-      >
-      <textarea
-        v-model="submission"
-        rows="4"
-        :class="{ correct: answerIsCorrect, wrong: answerIsWrong }"
-      ></textarea>
+      <label for="submission">Q. {{ props.qna[props.currentChapterNumber - 1]['chapter_question'] }} <button
+          @click.prevent="play">
+          <VolumeIcon />
+        </button></label>
+      <textarea v-model="submission" rows="4" :class="{ correct: answerIsCorrect, wrong: answerIsWrong }"></textarea>
       <button type="submit">Submit Answer</button>
     </form>
     <div>

@@ -37,7 +37,6 @@ function submitAnswer() {
   }
 }
 
-const voice = ref()
 const TTStext = ref(
   props.qna[props.currentChapterNumber - 1]['question'] +
   '. Option A. ' +
@@ -78,7 +77,7 @@ function play() {
   <form class="mcq-form" @submit.prevent="submitAnswer">
     <p v-if="answerIsCorrect">Correct Answer</p>
     <p v-if="answerIsWrong">Wrong Answer</p>
-    <label for="">Q. {{ props.qna[props.currentChapterNumber - 1]['question'] }}<button @click.prevent="play">
+    <label for="">Q. {{ props.qna[props.currentChapterNumber - 1]['question'] }} <button @click.prevent="play">
         <VolumeIcon />
       </button></label>
     <span><input v-model="selectedOption" type="radio" name="options" id="option_1" value="1" /><label for="option_1">{{
