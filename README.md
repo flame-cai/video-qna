@@ -1,14 +1,6 @@
 # Video QnA
 
-This template should help get you started developing with Vue 3 in Vite.
-
-## Recommended IDE Setup
-
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
-
-## Customize configuration
-
-See [Vite Configuration Reference](https://vitejs.dev/config/).
+This application generates helpful revision questions for youtube videos. This repository contains the application's frontend. Follow the following instructions to run the frontend.
 
 ## Project Setup
 
@@ -22,14 +14,22 @@ npm install
 npm run dev
 ```
 
-### Compile and Minify for Production
+## Additional Configuration
 
-```sh
-npm run build
+Make sure to create a .env file with the following content.
+
+```
+VITE_BACKEND_URL='http://localhost:5000'
 ```
 
-### Lint with [ESLint](https://eslint.org/)
+This is the URL of the flask backend in a development environment.
 
-```sh
-npm run lint
-```
+This repository's production backend url has been configured through Github environment variables.
+
+## Backend
+
+Make sure the backend is running as well. Go to the [Backend's repository]([url](https://github.com/flame-cai/video-qna-backend)) for instructions on running the backend.
+
+Feel free to contact bharath.valaboju@flame.edu.in for help!
+
+
