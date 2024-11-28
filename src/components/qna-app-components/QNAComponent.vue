@@ -131,9 +131,13 @@ function resetQuiz() {
       :isSubmitted="submittedQuestions[currentChapterNumber - 1].isSubmitted"
       :isCorrect="submittedQuestions[currentChapterNumber - 1].isCorrect" :score='score'
       @submit-answer="submitCurrentQuestion" />
+      <button @click="resetQuiz">New Quiz</button>
+  </div>
+  <div v-else-if="isQuizCompleted" class="quiz-completed-component">
+    <QuizCompletedComponent :score="score" />
     <button @click="resetQuiz">New Quiz</button>
   </div>
-  <QuizCompletedComponent v-else-if="isQuizCompleted" :score="score" />
+  
   <PlayerComponentLoader v-else />
 </template>
 
@@ -144,4 +148,11 @@ div.player-component {
   justify-content: center;
   align-items: center;
 }
+
+div.quiz-completed-component {
+  display: block;
+  text-align: center;
+  align-content: center;
+}
+
 </style>

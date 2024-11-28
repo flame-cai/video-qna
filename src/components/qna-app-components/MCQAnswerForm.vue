@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted, ref, computed } from 'vue'
+import { ref, computed } from 'vue'
 import { useSpeechSynthesis } from '@vueuse/core'
 
 import VolumeIcon from './VolumeIcon.vue';
@@ -44,16 +44,6 @@ const TTStext = ref(
 )
 const speech = useSpeechSynthesis(TTStext, {
   rate: 0.75
-})
-
-let synth
-
-onMounted(() => {
-  if (speech.isSupported.value) {
-    setTimeout(() => {
-      synth = window.speechSynthesis
-    })
-  }
 })
 
 function play() {

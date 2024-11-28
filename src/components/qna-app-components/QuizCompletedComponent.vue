@@ -5,5 +5,7 @@ const props = defineProps(['score'])
 </script>
 
 <template>
-    Your score is {{ props.score }}
+    <p>
+        Your score is {{ props.score }}
+    </p>
 </template>
