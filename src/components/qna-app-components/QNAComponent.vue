@@ -125,13 +125,16 @@ function resetQuiz() {
       @update-chapter="(n) => (currentChapterNumber = n)" @reload="reload_key++"
       @update-video-playing="(condition) => (isVideoPlaying = condition)" />
     <SubjectiveAnswerForm v-if="currentChapterNumber > 0 && question_format === 'subjective'" :qna="qna"
-      :currentChapterNumber="currentChapterNumber" :isVideoPlaying="isVideoPlaying" />
+      :currentChapterNumber="currentChapterNumber" :isVideoPlaying="isVideoPlaying"
+      :isSubmitted="submittedQuestions[currentChapterNumber - 1].isSubmitted"
+      :isCorrect="submittedQuestions[currentChapterNumber - 1].isCorrect" :score="score" 
+      @submit-answer="submitCurrentQuestion" />
     <MCQAnswerForm v-else-if="currentChapterNumber > 0 && question_format === 'mcq'" :qna="qna"
       :currentChapterNumber="currentChapterNumber" :isVideoPlaying="isVideoPlaying"
       :isSubmitted="submittedQuestions[currentChapterNumber - 1].isSubmitted"
       :isCorrect="submittedQuestions[currentChapterNumber - 1].isCorrect" :score='score'
       @submit-answer="submitCurrentQuestion" />
-      <button @click="resetQuiz">New Quiz</button>
+    <button @click="resetQuiz">New Quiz</button>
   </div>
   <div v-else-if="isQuizCompleted" class="quiz-completed-component">
     <QuizCompletedComponent :score="score" />

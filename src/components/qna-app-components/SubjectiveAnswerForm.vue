@@ -1,16 +1,22 @@
 <script setup>
+import { ref, watch, computed } from 'vue'
 import { useSpeechSynthesis } from '@vueuse/core';
-import { ref, watch, onMounted } from 'vue'
 
 import VolumeIcon from './VolumeIcon.vue';
 
-const props = defineProps(['qna', 'currentChapterNumber', 'isVideoPlaying'])
+const props = defineProps(['qna', 'currentChapterNumber', 'isVideoPlaying', 'isSubmitted', 'isCorrect', 'score'])
+const emit = defineEmits(['submit-answer',])
 
 const submission = ref('')
-const score = ref(0)
 
-const answerIsCorrect = ref(false)
-const answerIsWrong = ref(false)
+const answerIsCorrect = computed(() => {
+  if (props.isCorrect) return true;
+  else return false
+})
+const answerIsWrong = computed(() => {
+  if (props.isSubmitted && !props.isCorrect) return true;
+  else return false;
+})
 const explanation = ref('')
 
 watch(
@@ -25,8 +31,7 @@ watch(
 
 const speech = useSpeechSynthesis(props.qna[props.currentChapterNumber - 1]['chapter_question'], {
   rate: 0.75,
-}
-)
+})
 
 function submitAnswer() {
   fetch(`${import.meta.env.VITE_BACKEND_URL}/evaluate-answer`, {
@@ -45,24 +50,13 @@ function submitAnswer() {
       console.log(object)
       const data = object.data
       if (data.isCorrect) {
-        answerIsCorrect.value = true
-        score.value++
+        emit('submit-answer', true);
       } else {
-        answerIsWrong.value = true
-        explanation.value = data.explanation
+        emit('submit-answer', false);
+        explanation.value = data.explanation;
       }
     })
 }
-
-let synth
-
-onMounted(() => {
-  if (speech.isSupported.value) {
-    setTimeout(() => {
-      synth = window.speechSynthesis;
-    })
-  }
-})
 
 function play() {
   if (speech.status.value === 'pause') {
@@ -83,11 +77,11 @@ function play() {
           <VolumeIcon />
         </button></label>
       <textarea v-model="submission" rows="4" :class="{ correct: answerIsCorrect, wrong: answerIsWrong }"></textarea>
-      <button type="submit">Submit Answer</button>
+      <button type="submit" :disabled="props.isSubmitted">Submit Answer</button>
     </form>
     <div>
       <p v-if="answerIsWrong">{{ explanation }}</p>
-      <p>Your Score: {{ score }}</p>
+      <p>Your Score: {{ props.score }}</p>
     </div>
   </div>
 </template>
